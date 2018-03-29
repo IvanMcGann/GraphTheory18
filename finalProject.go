@@ -17,39 +17,57 @@ func ReadFromInput() (string, error) {
 	return strings.TrimSpace(s), err
 }
 
+// return type infix is returned from fucntion intopost which converts infix to postfix regular expressions
 func intopost(infix string) string {
+
+	//maps characters into integer numbers, can keep track of special characters
 	specials := map[rune]int{'*': 10, '.': 9,'|':8}
+
+	// pofix,s are an array of runes, a rune is a character as displayed on screen(utf8), s is a stack 
 	pofix, s := []rune{}, []rune{}
 
+	//loop over the infix and return index of read character(1, 0 , 3, etc..) _ is ignored and r is the character. Range converts each element to a rune.
 	for _, r := range infix{
 		switch {
+		//
 		case r == '(':
+			//put at the end of the stack
 			s = append(s, r)
 		case r == ')':
+			//pop off the stack until the end.
+			//while last character on stack doesn't equal open bracket append onto the top of the stack. 
 		for s[len(s)-1] != '(' {
 			pofix, s = append(pofix, s[len(s)-1]), s[:len(s)-1]
 		}
 
+		//s[:len(s)-1] is everything up to the bottom of the stack 
 		s = s[:len(s)-1]
+		
+		//if r is in specials array above. 
 		case specials[r] > 0:
+			//while something is on the stack and less than what is at the end of the stack, take element off top of stack and put it into the end of the stack 
 			for len(s) > 0 && specials[r] <= specials[s[len(s)-1]] {
 				pofix, s = append(pofix, s[len(s)-1]), s[:len(s)-1]
 			}
 			s = append(s, r)
+			//r is not a special or bracket character eg a, b, c, x, y, z
 		default:
+			//takes character and puts at end of output.
 			pofix = append(pofix, r)
 
 		}//switch
 	}//for
 
-
+		//if anything is on the top of the stack append it to the output
 		for len(s) > 0 {
 			pofix, s = append(pofix, s[len(s)-1]), s[:len(s)-1]
 		}
 
+		//returns pofix in string format
 		return string(pofix)
 
 }
+////////////////////////////////////////////////////////////////////////////////////////////
 
 type state struct {
     symbol rune
@@ -154,6 +172,7 @@ func pomatch(po string, s string) bool {
 	return isMatch
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 func main(){
 	fmt.Println("Graph Theory Project 2018: NFA's from a regular expression")
