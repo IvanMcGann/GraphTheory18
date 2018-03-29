@@ -157,7 +157,9 @@ func postfixRegexNFA(postfix string) *nfa {
         
         }//switch
 	}// for	
-		
+
+	
+
 		if len(nfastack) != 1 {
 			fmt.Println("Uh oh...", len(nfastack), nfastack)
 		}
@@ -166,43 +168,62 @@ func postfixRegexNFA(postfix string) *nfa {
     return nfastack[0]
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+//take a list of pointers to state, single pointer to state and the accept state. 
 func addState(l []*state, s *state, a *state) []*state {
-    l = append(l, s)
-    if s != a && s.symbol == 0 {
+	//append to the list, the state that is passed in
+	l = append(l, s)
+	//if s is not an accept state and the state has its value as a zero, (0 is the zero value of rune not a character) 
+	if s != a && s.symbol == 0 {
+		//pass list l, another s state edge and accept state a to the list l
         l = addState(l, s.edge1, a)
-        if s.edge2 != nil {
+		//if edge2 is not a empty/null(nil in go) value
+		if s.edge2 != nil {
+		//pass list l, another s state and accept state a to the list l
             l = addState(l, s.edge2, a)
         }
-    }
+	}
+	//returns a list of pointers to state
     return l
 }
 
+//takes arg postfixRegexNFA po and string s; returns a boolean type (isMatch) 
 func pomatch(po string, s string) bool {	
+	//set boolean false by default; indicates postfix regexp doesn't match string
 	isMatch := false
+	//new variable from postfixRegexNFA po is called upon
 	ponfa := postfixRegexNFA(po)
 
+	//array of pointers to current and next states. next is accessed by current  
 	current := []*state{}
 	next := []*state{}
 
+	//passes current (by converting to a slice) to addState function so you can add the initial and accept states for postfix 
 	current = addState(current[:], ponfa.initial, ponfa.accept)
-
+	
+	//loop through s a character at a time
 	for _, r := range s {		
+		//everytime read character loops through the current array
 		for _, c := range current {
+			//if c is same as symbol being read
 			if c.symbol == r {
+				//add c state and any other state to the next array
 				next = addState(next[:], c.edge1, ponfa.accept)
 			}
 		}
+		//set/swap current to next and set next to a blank array, to forget old states and read next character
 		current, next = next, []*state{}
 	}
 
+	//loop through current array
 	for _, c := range current {
+		//if its equal to accept
 		if c == ponfa.accept {
+			// set boolean to true/accept the state
 			isMatch = true
 			break
 		}
 	}
+	//return boolean expression
 	return isMatch
 }
 
