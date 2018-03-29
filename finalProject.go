@@ -17,7 +17,7 @@ func ReadFromInput() (string, error) {
 	return strings.TrimSpace(s), err
 }
 
-// return type infix is returned from fucntion intopost which converts infix to postfix regular expressions
+// return type infix is returned from function intopost which converts infix to postfix regular expressions
 func intopost(infix string) string {
 
 	//maps characters into integer numbers, can keep track of special characters
@@ -69,70 +69,104 @@ func intopost(infix string) string {
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
 
+//stores the state of possible links to other structs. symbol is a binary value of zero by rune.
 type state struct {
     symbol rune
     edge1 *state
     edge2 *state
 }
 
+//keeps track of initial and accept state of Non-deterministic finite automata.
 type nfa struct {
     initial *state
     accept *state 
 }
 
+//string input is postfix, return pointer to nfa structs 
 func postfixRegexNFA(postfix string) *nfa {
+	//a stack that is annaray of pointers to nfa that is empty
     nfastack := []*nfa{}
 
+	//loop through rune ata time depending on the character(. concat, | union,* kleane star, default)
     for _, r := range postfix {
 
         switch r {
-        case '.':
-            frag2 := nfastack[len(nfastack)-1]
-            nfastack = nfastack[:len(nfastack)-1]
-            frag1 := nfastack[len(nfastack)-1]
+		case '.':
+			//pop off last index of nfas stack frag2
+			frag2 := nfastack[len(nfastack)-1]
+			//remove up to end of the nfastack frag2
+			nfastack = nfastack[:len(nfastack)-1]
+			//pop off last index of nfas stack frag1
+			frag1 := nfastack[len(nfastack)-1]
+			//remove up to end of the nfastack frag1
             nfastack = nfastack[:len(nfastack)-1]
 
+			//join the frag1 to frag2 initial state. 
             frag1.accept.edge1 = frag2.initial
 
+			//and push to nfastack, new fragment is created using & to use address for pointer nfastack  
             nfastack = append(nfastack, &nfa{initial: frag1.initial, accept: frag2.accept})
             
-        case '|':
-            frag2 := nfastack[len(nfastack)-1]
-            nfastack = nfastack[:len(nfastack)-1]
+		case '|':
+			//pop off last index of nfas stack frag2
+			frag2 := nfastack[len(nfastack)-1]
+			//remove up to end of the nfastack frag2
+			nfastack = nfastack[:len(nfastack)-1]
+			//pop off last index of nfas stack frag1
             frag1 := nfastack[len(nfastack)-1]
+			//remove up to end of the nfastack frag1
             nfastack = nfastack[:len(nfastack)-1]
-            
-            initial := state{edge1: frag1.initial, edge2: frag2.initial}
+
+			
+			// new state edge 1 points to initial frag1 above, edge to to frag2 above
+			initial := state{edge1: frag1.initial, edge2: frag2.initial}
+			//new accept state
             accept := state{}
-            frag1.accept.edge1 = &accept
+			//frag1 points to edge1 new accept state
+			frag1.accept.edge1 = &accept
+			//frag2 points to edge1 new accept state
             frag2.accept.edge1 = &accept            
 
+			//push to nfastack, new initial/accept states pointed to nfastack pointer 
             nfastack = append(nfastack, &nfa{initial: &initial, accept: &accept})
         
-        case '*':
+		case '*':
+			//one fragment popped off stack for kleane star
             frag := nfastack[len(nfastack)-1]
             nfastack := nfastack[:len(nfastack)-1]
-
-            accept := state{}
-            initial := state{edge1: frag.initial, edge2: &accept}
-            frag.accept.edge1 = frag.initial
+			
+			//new accept state
+			accept := state{}
+			//new state edge1 points to initial fragment and edge 2 needs to point to accept state  
+			initial := state{edge1: frag.initial, edge2: &accept}
+			//join edge1 to initial state
+			frag.accept.edge1 = frag.initial
+			//join edge2 to accept state
             frag.accept.edge2 = &accept
 
+			//push new fragment to nfastack
             nfastack = append(nfastack, &nfa{initial: &initial, accept: &accept})
 
-        default: 
-            accept := state{}
+		default: 
+			//new accept state
+			accept := state{}
+			//new iniial state, set symbol to r and only edge points to accept state
             initial := state{symbol: r, edge1: &accept}
-
+			//pushes to nfastack
             nfastack = append(nfastack, &nfa{initial: &initial, accept: &accept})
         
         }//switch
 	}// for	
+		
 		if len(nfastack) != 1 {
 			fmt.Println("Uh oh...", len(nfastack), nfastack)
 		}
+
+	//returns value of nfastack which is nfa(just 1 item)	
     return nfastack[0]
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 func addState(l []*state, s *state, a *state) []*state {
     l = append(l, s)
