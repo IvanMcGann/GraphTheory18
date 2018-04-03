@@ -6,11 +6,11 @@ import(
 	"os"
 	"strings"
 )
-
+//adapted from
 //https://stackoverflow.com/questions/20895552/how-to-read-input-from-console-line?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
 
+//function to allow input to be read input from command line to be read
 func ReadFromInput() (string, error) {
-
 	reader := bufio.NewReader(os.Stdin)
 	s, err := reader.ReadString('\n')
 
@@ -158,7 +158,6 @@ func postfixRegexNFA(postfix string) *nfa {
         }//switch
 	}// for	
 
-	
 
 		if len(nfastack) != 1 {
 			fmt.Println("Uh oh...", len(nfastack), nfastack)
@@ -245,7 +244,7 @@ func main(){
 		fmt.Println("Option", option, "was entered. ")		
 		//ask user to enter an infix 
 		fmt.Print("Enter an infix expression: ")
-		//using above method, read in the infix expression
+		//using above function, read in the infix expression
 		infixString, err := ReadFromInput()
 		
 		//error handling
@@ -273,7 +272,7 @@ func main(){
 		fmt.Println("Option", option, "Was entered. ")
 		//ask user to enter a postfix expression 
 		fmt.Print("Enter postfix expression: ")
-		//using above method, read in the infix expression
+		//using above function, read in the infix expression
 		infixString, err := ReadFromInput()
 		//error handling
 		if err != nil {
@@ -291,6 +290,7 @@ func main(){
 		//display results
 		fmt.Println("Does the string ", testExp, " match ?", pomatch(infixString, testExp))
 	default:
+		//displays when anything other than 1 or 2 is selected
 		fmt.Println("Next time, please enter a choice (1 or 2) if you want to run the program")
 	}
 
