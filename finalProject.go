@@ -250,7 +250,7 @@ func main(){
 		
 		//error handling
 		if err != nil {
-			fmt.Println("Error when scanning input:", err.Error()) /*  */
+			fmt.Println("Error when scanning input:", err.Error())
 			return
 		}
 		//display expression
@@ -263,32 +263,32 @@ func main(){
 		testExp, err := ReadFromInput()
 		//more error handling
 		if err != nil {
-			fmt.Println("Error when scanning input:", err.Error()) /*  */
+			fmt.Println("Error when scanning input:", err.Error())
 			return
 		}
 		//display results
 		fmt.Println("Does the string", testExp, " match ?", pomatch(newPostFix, testExp))
 	case 2:
-		
+		//ask user to make choice from 1 3 tier selection
 		fmt.Println("Option", option, "Was entered. ")
-		
+		//ask user to enter a postfix expression 
 		fmt.Print("Enter postfix expression: ")
-		
+		//using above method, read in the infix expression
 		infixString, err := ReadFromInput()
-		
+		//error handling
 		if err != nil {
 			fmt.Println("Error when scanning input:", err.Error()) 
 			return
 		}
-		
+		//sks user to enter a string to test if above matches it
 		fmt.Print("Enter a string to test if it matches the nfa: ")
 		testExp, err := ReadFromInput()
-		
+		//even more error handling
 		if err != nil {
 			fmt.Println("Error when scanning input:", err.Error()) 
 			return
 		}
-		
+		//display results
 		fmt.Println("Does the string ", testExp, " match ?", pomatch(infixString, testExp))
 	default:
 		fmt.Println("Next time, please enter a choice (1 or 2) if you want to run the program")
