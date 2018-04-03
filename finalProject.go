@@ -230,39 +230,44 @@ func pomatch(po string, s string) bool {
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
 func main(){
+	//header for UI
 	fmt.Println("Graph Theory Project 2018: NFA's from a regular expression")
-	
-	fmt.Println("Choose Conversion \n 1. Infix Expressions Conversionto NFA \n 2. Postfix expression conversion \n 3. Exit project \n")
-
+	//ask user to enter the choice
+	fmt.Println("Choose Conversion \n 1. Infix Expressions Conversion to NFA \n 2. Postfix expression conversion \n 3. Exit project \n")
+	//choice of user in the UI menu
 	var option int
+	//read option
 	fmt.Scanln(&option)
 
 	switch option {
 	case 1:
+		//
 		fmt.Println("Option", option, "was entered. ")		
+		//ask user to enter an infix 
 		fmt.Print("Enter an infix expression: ")
-				
+		//using above method, read in the infix expression
 		infixString, err := ReadFromInput()
 		
+		//error handling
 		if err != nil {
 			fmt.Println("Error when scanning input:", err.Error()) /*  */
 			return
 		}
-		
+		//display expression
 		fmt.Println("infix", infixString)
-		
-		newPost := intopost(infixString)
-		fmt.Println("postfix notation:", newPost)
-
+		//change infix to postfix expression
+		newPostFix := intopost(infixString)
+		fmt.Println("postfix notation:", newPostFix)
+		//asks user to enter a string to test if above matches it
 		fmt.Print("Enter a string to test if it matches the nfa: ")
-		userTest, err := ReadFromInput()
-
+		testExp, err := ReadFromInput()
+		//more error handling
 		if err != nil {
 			fmt.Println("Error when scanning input:", err.Error()) /*  */
 			return
 		}
-
-		fmt.Println("Does the string", userTest, " match ?", pomatch(newPost, userTest))
+		//display results
+		fmt.Println("Does the string", testExp, " match ?", pomatch(newPostFix, testExp))
 	case 2:
 		fmt.Println("Next time, please enter choice 1 to run the program ;) ")
 	default:
