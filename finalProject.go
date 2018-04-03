@@ -239,8 +239,34 @@ func main(){
 
 	switch option {
 	case 1:
+		fmt.Println("Option", option, "was entered. ")		
+		fmt.Print("Enter an infix expression: ")
+				
+		infixString, err := ReadFromInput()
+		
+		if err != nil {
+			fmt.Println("Error when scanning input:", err.Error()) /*  */
+			return
+		}
+		
+		fmt.Println("infix", infixString)
+		
+		newPost := intopost(infixString)
+		fmt.Println("postfix notation:", newPost)
+
+		fmt.Print("Enter a string to test if it matches the nfa: ")
+		userTest, err := ReadFromInput()
+
+		if err != nil {
+			fmt.Println("Error when scanning input:", err.Error()) /*  */
+			return
+		}
+
+		fmt.Println("Does the string", userTest, " match ?", pomatch(newPost, userTest))
 	case 2:
-	default: fmt.Println("please enter a choice (1 or 2) if you want to run the program")
+		fmt.Println("Next time, please enter choice 1 to run the program ;) ")
+	default:
+		fmt.Println("Next time, please enter a choice (1 or 2) if you want to run the program")
 	}
 
 }
