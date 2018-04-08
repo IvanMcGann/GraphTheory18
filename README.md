@@ -22,9 +22,27 @@ completed. You might do that for this project as follows:
 
 
 User Manual:
+1. Compile the go file (finalProject.go) by opening the command line of choice and once in the root folder type go build. Enter go build to do this.
+2. Once completed run the .exe file here named GraphTheory18.exe 
+3. Next you will find the menu enter options 1 or 2 to run project, option 3 to exit.
+4. Once you choose option (1.) enter an infix expression then enter a string to test against it to see if it matches.
+5. Once entered you will get a true or false statement. 
+6. If you choose option (2.) enter a postfix expression to to test, then enter a string to test it against.
+7. Once entered you will get a true or false statement.
+8. If you enter option (3.) it will close the project.
 
 
-Links used so far:
+
+2
+Option 2 Was entered.
+Enter postfix expression: abc
+Enter a string to test if it matches the nfa:
+
+
+
+Links used:
+
+https://stackoverflow.com/questions/20895552/how-to-read-input-from-console-line?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
 
 http://www.rexegg.com/regex-quickstart.html
 
