@@ -159,9 +159,9 @@ func postfixRegexNFA(postfix string) *nfa {
 	}// for	
 
 
-		if len(nfastack) != 1 {
-			fmt.Println("Uh oh...", len(nfastack), nfastack)
-		}
+		//if len(nfastack) != 1 {
+			//fmt.Println("Uh oh...", len(nfastack), nfastack)
+		//}
 
 	//returns value of nfastack which is nfa(just 1 item)	
     return nfastack[0]
